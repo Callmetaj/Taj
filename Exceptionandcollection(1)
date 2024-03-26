@@ -1,0 +1,53 @@
+import java.util.regex.Pattern;
+
+class AgeNotWithinRangeException extends Exception {
+    public AgeNotWithinRangeException() {
+        super("Age not within range exception");
+    }
+}
+
+class NameNotValidException extends Exception {
+    public NameNotValidException() {
+        super("Name not valid exception");
+    }
+}
+
+class Student {
+    private int rollNumber;
+    private String name;
+    private int age;
+    private String course;
+
+    public Student(int rollNumber, String name, int age, String course) throws AgeNotWithinRangeException, NameNotValidException {
+        if (age < 15 || age > 21) {
+            throw new AgeNotWithinRangeException();
+        }
+
+        if (!isValidName(name)) {
+            throw new NameNotValidException();
+        }
+
+        this.rollNumber = rollNumber;
+        this.name = name;
+        this.age = age;
+        this.course = course;
+    }
+
+    private boolean isValidName(String name) {
+        // Check if name contains numbers or special symbols
+        return !Pattern.compile("[0-9!@#$%^&*(),.?\":{}|<>]").matcher(name).find();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Student student = new Student(1, "John Doe", 20, "Computer Science");
+            System.out.println("Student created successfully!");
+        } catch (AgeNotWithinRangeException e) {
+            System.out.println(e.getMessage());
+        } catch (NameNotValidException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
